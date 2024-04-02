@@ -1,0 +1,1 @@
+BasicNotes is a simple networked notetaking app for saving notes to a server using sockets.
