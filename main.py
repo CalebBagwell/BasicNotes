@@ -1,4 +1,5 @@
 import datetime
+from server import *
 
 class NoteManager:
     #Handles note-taking logic, including saving and reading notes.
@@ -51,6 +52,8 @@ class CLI:
                 print("Invalid choice. Please select 1, 2, or 3.")
 
 if __name__ == "__main__":
-    note_manager = NoteManager()
-    cli = CLI(note_manager)
-    cli.prompt_user()
+    #note_manager = NoteManager()
+    #cli = CLI(note_manager)
+    #cli.prompt_user()
+    
+    server()
