@@ -7,6 +7,17 @@ class NoteManager:
     def __init__(self, filename="notes.txt"):
         #Initialize the NoteManager with a file to store the notes.
         self.filename = filename
+        self.notes = []
+    
+    def get_notes(self):
+        #Return a list of tuples containing the note and the date it was written.
+        notes_with_dates = []
+        with open(self.filename, "r") as file:
+            notes = file.readlines()
+        for note in notes:
+            timestamp, note_text = note.strip().split("] ")
+            notes_with_dates.append((note_text, timestamp[1:]))
+        return notes_with_dates
 
     def add_note(self, note):
         #Add a note with a timestamp to the file.
@@ -17,16 +28,13 @@ class NoteManager:
         print("Note added successfully.")
 
     def display_notes(self):
-        #Read and display all notes from the file.
-        try:
-            with open(self.filename, "r") as file:
-                notes = file.readlines()
-                print("Notes:")
-                for note in notes:
-                    print(note.strip())
-        except FileNotFoundError:
-            print("No notes found.")
-
+        #Displays the notes stored in the file specified by `self.filename`.
+        #Reads the contents of the file line by line and prints each note to the console.
+        with open(self.filename, "r") as file:
+            notes = file.readlines()
+        for note in notes:
+            print(note, end='')
+        
 class CLI:
     #Handles the Command Line Interface for interacting with the user.
     
