@@ -3,21 +3,28 @@ from server import *
 
 class NoteManager:
     #Handles note-taking logic, including saving and reading notes.
-    
+
     def __init__(self, filename="notes.txt"):
         #Initialize the NoteManager with a file to store the notes.
         self.filename = filename
         self.notes = []
-    
+
+    def sync(self):
+        # Sync the notes.txt file with the server by overwriting the one stored on the server.
+        print("This button does nothing!") 
+
     def get_notes(self):
-        #Return a list of tuples containing the note and the date it was written.
-        notes_with_dates = []
-        with open(self.filename, "r") as file:
-            notes = file.readlines()
+        with open('notes.txt', 'r') as f:
+            notes = f.readlines()
+
+        note_list = []
         for note in notes:
-            timestamp, note_text = note.strip().split("] ")
-            notes_with_dates.append((note_text, timestamp[1:]))
-        return notes_with_dates
+            if "] " in note:  # Check if the note is in the correct format
+                timestamp, note_text = note.strip().split("] ")
+                note_list.append((note_text, timestamp[1:]))
+            else:
+                print(f"Skipping note '{note.strip()}' because it's not in the correct format.")
+        return note_list
 
     def add_note(self, note):
         #Add a note with a timestamp to the file.
@@ -26,6 +33,7 @@ class NoteManager:
         with open(self.filename, "a") as file:
             file.write(formatted_note)
         print("Note added successfully.")
+        self.notes.append(note)
 
     def display_notes(self):
         #Displays the notes stored in the file specified by `self.filename`.

@@ -1,7 +1,5 @@
 import socket
 
-import socket
-
 def server():
     #This function starts a server that listens for incoming connections from clients.
     #It receives data from the client, prints it, and sends a response back to the client.
@@ -30,6 +28,10 @@ def server():
             
         # Print the received data
         print(f"Received from client: {data}")
+
+        # Write the received data to notes.txt
+        with open('notes.txt', 'a') as f:
+            f.write(data + '\n')
 
         # Get user input for the response to send to the client
         response = input("Enter response to send to client: ")

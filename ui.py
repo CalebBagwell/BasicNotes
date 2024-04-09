@@ -15,15 +15,17 @@ def add_note():
         refresh_notes()
 
 def refresh_notes():
-    # Refreshes the notes displayed in the treeview widget.
-    # This function clears the existing notes in the treeview widget and retrieves the latest notes from the note manager.
-    # It then inserts each note into the treeview widget.
-
+    # Clear existing treeview
     tree.delete(*tree.get_children())
-    notes = note_manager.get_notes()
+    
+    # Get notes from NoteManager
+    notes = note_manager.get_notes()  # No arguments should be passed here
+    
+    # Insert notes into treeview
     for note in notes:
-        note_text, note_date = note  # Unpack the tuple
-        tree.insert('', 'end', values=(note_text, note_date))
+        # Assuming each note is a tuple of (note_text, timestamp)
+        # You might need to adjust this based on the actual structure of your notes
+        tree.insert('', 'end', values=note)
 
 # Create the main window
 root = tk.Tk()
@@ -53,6 +55,9 @@ button_frame = tk.Frame(root)
 button_frame.pack(fill=tk.X)
 
 # Add buttons
+sync_button = tk.Button(button_frame, text="Sync", command=note_manager.sync())
+sync_button.pack(side=tk.LEFT, padx=5, pady=5)
+
 add_button = tk.Button(button_frame, text="Add Note", command=add_note)
 add_button.pack(side=tk.LEFT, padx=5, pady=5)
 
