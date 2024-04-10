@@ -55,7 +55,7 @@ button_frame = tk.Frame(root)
 button_frame.pack(fill=tk.X)
 
 # Add buttons
-sync_button = tk.Button(button_frame, text="Sync", command=note_manager.sync())
+sync_button = tk.Button(button_frame, text="Sync", command=note_manager.sync)
 sync_button.pack(side=tk.LEFT, padx=5, pady=5)
 
 add_button = tk.Button(button_frame, text="Add Note", command=add_note)

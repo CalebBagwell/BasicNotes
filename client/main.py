@@ -1,5 +1,6 @@
 import datetime
-from server import *
+import socket
+import os
 
 class NoteManager:
     #Handles note-taking logic, including saving and reading notes.
@@ -10,10 +11,31 @@ class NoteManager:
         self.notes = []
 
     def sync(self):
-        # Sync the notes.txt file with the server by overwriting the one stored on the server.
-        print("This button does nothing!") 
+        # Sync the notes.txt file with the server by sending its contents to the server.
+        s = socket.socket()
+        host = socket.gethostname()  # or '127.0.0.1' for local testing
+        port = 3333
+        s.connect((host, port))
+
+        # Check if notes.txt exists and send its contents
+        if os.path.exists(self.filename):
+            with open(self.filename, 'r') as f:
+                notes = f.read()
+                s.send(notes.encode())
+        else:
+            print("No notes to sync.")
+            s.send("".encode())
+
+        # Wait for a response from the server
+        response = s.recv(1024).decode()
+        print(f"Server response: {response}")
+
+        # Close the connection
+        s.close()
 
     def get_notes(self):
+        #Retrieves the notes from the 'notes.txt' file and returns them as a list of tuples.
+        #Each tuple in the list contains the note text and its corresponding timestamp.
         with open('notes.txt', 'r') as f:
             notes = f.readlines()
 
@@ -42,34 +64,9 @@ class NoteManager:
             notes = file.readlines()
         for note in notes:
             print(note, end='')
-        
-class CLI:
-    #Handles the Command Line Interface for interacting with the user.
-    
-    def __init__(self, note_manager):
-        #Initialize the CLI with a NoteManager instance.
-        self.note_manager = note_manager
 
-    def prompt_user(self):
-        #Prompt the user for action: take a note, display notes, or exit.
-        while True:
-            print("\n1. Take a note\n2. Display notes\n3. Exit")
-            choice = input("Choose an option: ")
-
-            if choice == '1':
-                note = input("Enter your note: ")
-                self.note_manager.add_note(note)
-            elif choice == '2':
-                self.note_manager.display_notes()
-            elif choice == '3':
-                print("Exiting...")
-                break
-            else:
-                print("Invalid choice. Please select 1, 2, or 3.")
-
+# Example usage
 if __name__ == "__main__":
-    #note_manager = NoteManager()
-    #cli = CLI(note_manager)
-    #cli.prompt_user()
-    
-    server()
+    manager = NoteManager()
+    manager.add_note("Test note")
+    manager.sync()
